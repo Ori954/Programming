@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goal : MonoBehaviour {
+using UnityEngine.Events;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+namespace GoneHome
+{
+    public class Goal : MonoBehaviour
+    {
+        public UnityEvent onTriggered;
+
+        // Runs function when collider enters trigger (Goal)
+        void OnTriggerEnter(Collider other)
+        {
+            // Check if other is "Player"
+            if (other.name == "Player")
+            {
+                // Run 'onTriggered' event
+                onTriggered.Invoke();
+            }
+        }
+    }
 }
