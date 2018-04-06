@@ -10,6 +10,12 @@ namespace GoneHome
     {
         public UnityEvent onTriggered;
 
+        //references"
+
+        private SpriteRenderer need;
+        private Rigidbody2D rigid;
+
+
         // Runs function when collider enters trigger (Goal)
         void OnTriggerEnter(Collider other)
         {
