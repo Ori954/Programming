@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SunnyLand
 {
+    // Force Unity to attach "PlayerController"
     [RequireComponent(typeof(PlayerController))]
     public class UserInput : MonoBehaviour
     {
@@ -11,6 +12,7 @@ namespace SunnyLand
         public bool isCrouching = false;
         public float inputH, inputV;
 
+        // Reference to player controller
         private PlayerController player;
 
         #region Unity Functions
@@ -22,24 +24,24 @@ namespace SunnyLand
         // Update is called once per frame
         void Update()
         {
-            // Updating input
+            // Update input
             GetInput();
-            // Controlling the player with input
+            // Control the Player with input
             player.Move(inputH);
             player.Climb(inputV);
-            if (isJumping) // If jump input has been made
+            if (isJumping) // If jump input is made
             {
-                // Tell controller to jump
+                // Make the controller jump
                 player.Jump();
             }
-            if (isCrouching) // If crouch input has been made
+            if(isCrouching) // If crouch input is made
             {
-                // Tell controller to crouch
+                // Make the controller crouch
                 player.Crouch();
             }
-            else // Otherwise
+            else // If the input is released
             {
-                // Tell controller to uncrouch
+                // Uncrouch the controller
                 player.UnCrouch();
             }
         }
@@ -56,4 +58,3 @@ namespace SunnyLand
         #endregion
     }
 }
-

@@ -4,22 +4,20 @@ using UnityEngine;
 
 namespace SunnyLand
 {
-    [RequireComponent(typeof(SpriteRenderer))]
-    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerController : MonoBehaviour
     {
         public float speed = 5f;
         public int health = 100;
         public int damage = 50;
-        [Tooltip("The maximum speed a player can move.")]
         public float maxVelocity = 5f;
         public float maxSlopeAngle = 45f;
-        [Header("Grounding")] // Attribute
+        [Header("Grounding")] // Attributes
         public float rayDistance = .25f;
         public bool isGrounded = false;
         public bool isOnSlope = false;
         [Header("Crouch")]
         public bool isCrouching = false;
+        [Header("Jump")]
         public float jumpHeight = 2f;
         public int maxJumpCount = 2;
         public bool isJumping = false;
@@ -35,9 +33,6 @@ namespace SunnyLand
         private SpriteRenderer rend;
         private Rigidbody2D rigid;
 
-        // Fold Code:   CTRL + M + O
-        // UnFold Code: CTRL + M + P
-
         #region Unity Functions
         // Use this for initialization
         void Awake()
@@ -48,9 +43,8 @@ namespace SunnyLand
         // Update is called once per frame
         void Update()
         {
+            // Constantly update player mechanics
             PerformMove();
-            PerformClimb();
-            PerformJump();
         }
         void FixedUpdate()
         {
@@ -58,7 +52,14 @@ namespace SunnyLand
         }
         void OnDrawGizmos()
         {
-
+            // Draw the ground ray
+            Ray groundRay = new Ray(transform.position, Vector3.down);
+            Gizmos.DrawLine(groundRay.origin, groundRay.origin + groundRay.direction * rayDistance);
+            // Draw the 'right' direction
+            Vector3 right = Vector3.Cross(groundNormal, Vector3.forward);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position - right,
+                            transform.position + right);
         }
         #endregion
 
@@ -78,9 +79,10 @@ namespace SunnyLand
         }
         public void Move(float horizontal)
         {
-            // If horizontal input 
-            if (horizontal != 0)
+            // If there is horizontal input
+            if(horizontal != 0)
             {
+                // Flip the sprite based on input direction
                 rend.flipX = horizontal < 0;
             }
             // Store the horizontal input for later
@@ -90,24 +92,23 @@ namespace SunnyLand
         {
 
         }
-        // Enemy damage methods
         public void Hurt(int damage)
         {
 
         }
         // Actions
-        void PerformMove()
-        {
-            // Calculate our 'right' direction based on surface
-            Vector3 right = Vector3.Cross(groundNormal, Vector3.forward);
-            // Add force in the 'right' direction
-            rigid.AddForce(right * inputH * speed);
-            // Limit our velocity
-            LimitVelocity();
-        }
         void PerformClimb()
         {
 
+        }
+        void PerformMove()
+        {
+            // Calculate 'right' depending on ground surface normal
+            Vector3 right = Vector3.Cross(groundNormal, Vector3.forward);
+            // Add force in the direction of horizontal movement
+            rigid.AddForce(right * inputH * speed);
+            // Limit the velocity
+            LimitVelocity();
         }
         void PerformJump()
         {
@@ -133,15 +134,15 @@ namespace SunnyLand
         // Helpers
         void LimitVelocity()
         {
-            // Store velocity in smaller variable name
+            // Copy current velocity to smaller variable name
             Vector3 vel = rigid.velocity;
-            // If vel reaches max velocity
+            // Check if velocity reached max vel
             if (vel.magnitude > maxVelocity)
             {
                 // Cap the velocity
                 vel = vel.normalized * maxVelocity;
             }
-            // Overwrite old velocity with new velocity
+            // Overwrite old velocity
             rigid.velocity = vel;
         }
         void StopClimbing()
