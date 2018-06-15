@@ -2,15 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Paddle : MonoBehaviour {
+namespace Breakout
+{
+    public class Paddle : MonoBehaviour
+    {
+        public float movementSpeed = 20f;
+        public Vector2[] directions =
+        {
+        new Vector2(-1, 1),
+        new Vector2(1, 1)
+    };
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        private Ball currentBall;
+
+        // Use this for initialization
+        void Start()
+
+        {
+            currentBall = GetComponentInChildren<Ball>();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
 }
