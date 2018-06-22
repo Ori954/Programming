@@ -7,7 +7,7 @@ using UnityEngine.AI;
 namespace TiltGoneHome
 {
 
-    public class Enermy : MonoBehaviour
+    public class Enemy : MonoBehaviour
     {
         public Transform target;
 
